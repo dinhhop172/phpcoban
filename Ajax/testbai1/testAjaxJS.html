@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<style>
+    table,
+    tr,
+    td,
+    th {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+
+
+<body>
+    <h2>Get data as JSON from a PHP file on the server.</h2>
+
+    <p id="demo"></p>
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Value</th>
+                <th>Meaning</th>
+            </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</body>
+<script>
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            var myObj = JSON.parse(this.responseText);
+            document.getElementById("demo").innerHTML = myObj;
+            var txt = "";
+            for (let i = 0; i < myObj.length; i++) {
+                txt += `<tr>
+                            <td>` + myObj[i].id + `</td>
+                            <td>` + myObj[i].value + `</td>
+                            <td>` + myObj[i].meaning + `</td>
+                        </tr>`
+            }
+            $('tbody').html(txt);
+            console.log(myObj);
+        }
+    };
+    xmlhttp.open("GET", "http://localhost/phpcoban/Ajax/testbai1/result.php", true);
+    xmlhttp.send();
+</script>
+
+</html>

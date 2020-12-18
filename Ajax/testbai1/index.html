@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container">
+        <h2>List vocabularies</h2>
+        <a aria-disabled="true" href="#" class="btn btn-info" id="get-data" aria-disabled="true">Click get data</a>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Stt</th>
+                    <th>Value</th>
+                    <th>Meaning</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="body_loading" class="">
+        <div>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalEdit" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>Value</label>
+                            <input type="text" name="value" class="form-control" id="value">
+                            <p class="" id="e_value"></p>
+                        </div>
+                        <div class="form-group">
+                            <label>Meaning</label>
+                            <input type="text" name="meaning" class="form-control" id="meaning">
+                            <p class="" id="e_meaning"></p>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" id="update_value" class="btn btn-primary">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $(function() {
+        $("#get-data").on('click', function() {
+            $('#body_loading').addClass('loading_box');
+            $this = $(this);
+            $this.addClass("disabled");
+            $.ajax({
+                url: "http://localhost/phpcoban/Ajax/testbai1/result.php",
+                method: "GET",
+                success: function(result) {
+                    $result = JSON.parse(result);
+                    // console.log($result);
+
+                    $txt = "";
+                    for (let i = 0; i < $result.length; i++) {
+                        $txt += `<tr id="` + $result[i]['id'] + `">
+                                <td>` + $result[i]['id'] + `</td>
+                                <td id="content_` + $result[i]['id'] + `">` + $result[i]['value'] + `</td>
+                                <td>` + $result[i]['meaning'] + `</td>
+                                <td>
+                                    <a href="#" onclick="actionEdit (` + $result[i]['id'] + `)" class="edit">Edit</a> |
+                                    <a href="#" onclick="actionDelete(` + $result[i]['id'] + `)" class="edit">Delete</a>
+                                <td>
+                                </tr>`
+                    }
+                    $('tbody').html($txt);
+                    $('#body_loading').removeClass('loading_box');
+                    $this.remove();
+                },
+                error: function(e) {
+
+                }
+            });
+        });
+        $("#update_value").on('click', function() {
+            $value = $("#value").val();
+            $meaning = $("#meaning").val();
+
+            $errValue = $('#e_value');
+            $errMeaning = $('#e_meaning');
+
+            $flag = true;
+
+            if ($value === "") {
+                $errValue.text('Value ko duoc rong!!');
+                $errValue.css('color', 'red');
+                $('#value').addClass('show_error');
+                $flag = false;
+            } else {
+                $errValue.text('');
+                $('#value').removeClass('show_error');
+            }
+
+            if ($meaning === "") {
+                $errMeaning.text('Meaning ko duoc rong!!');
+                $errMeaning.css('color', 'red');
+                $('#meaning').addClass('show_error');
+                $flag = false;
+            } else {
+                $errMeaning.text('');
+                $('#meaning').removeClass('show_error');
+            }
+
+            if ($flag) {
+                $content_id = $(this).attr('content_id');
+
+                $('#content_' + $content_id).text($value);
+                $('#content_' + $content_id).next().text($meaning);
+                swal({
+                    title: "Updated successfully !",
+                    icon: "success",
+                });
+                $('#modalEdit').modal('hide');
+            }
+        });
+    });
+
+    function actionDelete(id) {
+        $.ajax({
+            url: "http://localhost/phpcoban/Ajax/testbai1/result.php",
+            method: "get",
+            data: {
+                'id': id
+            },
+            success: function(result) {
+                $id = result;
+                $value = $("#content_" + $id).text();
+                $("#" + $id).remove();
+
+                swal({
+                    title: "Good job!",
+                    text: $value,
+                    icon: "success",
+                });
+
+                $elements = $('tbody > tr');
+
+                $.each($elements, function($key, $value) {
+                    $(this).children().first().text($key += 1);
+                    // console.log($value);
+                    // console.log(this);
+                    // console.log($(this).children().first().text());
+                });
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+    }
+
+    function actionEdit(id) {
+        // get value
+        $value = $("#content_" + id).text();
+        $meaning = $("#content_" + id).text();
+        // input value
+        $("#value").val($value);
+        $("#meaning").val($meaning);
+        $('#update_value').attr('content_id', id);
+
+        $('#meaning').removeClass('show_error');
+        $('#e_value').text('');
+        $('#value').removeClass('show_error');
+        $('#e_meaning').text('');
+
+        $('#modalEdit').modal('show');
+    }
+</script>
+<style>
+    .show_error {
+        border: 1px solid red;
+    }
+    
+    .loading_box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 870px;
+        background-color: none;
+        position: absolute;
+        top: 0;
+        width: 100%;
+    }
+    
+    .loading_box>p {
+        font-weight: bold;
+        font-size: 30px;
+        color: #00ff00;
+        display: inline
+    }
+    
+    .loading_box>div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 400px;
+        height: 400px
+    }
+    
+    .loading_box>div>span {
+        background-color: transparent;
+        height: 190px;
+        width: 190px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        border: 20px solid transparent;
+        border-bottom: 20px solid red;
+        border-top: 20px solid red;
+        animation: rotateleft 1.25s infinite ease-in-out;
+        position: absolute;
+    }
+    
+    .loading_box>div>span~span {
+        background-color: transparent;
+        width: 150px;
+        height: 150px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+        border: 20px solid transparent;
+        border-left: 20px solid red;
+        border-right: 20px solid red;
+        animation: rotateright 1.25s infinite ease-in-out;
+        position: absolute;
+    }
+    
+    .loading_box>section {
+        position: absolute;
+        overflow: hidden;
+        animation: words 2.5s infinite ease-in-out;
+    }
+    
+    .loading_box>section>p {
+        font-weight: bold;
+        color: white;
+    }
+    
+    @keyframes words {
+        from {
+            width: 0
+        }
+        to {
+            width: 130px
+        }
+    }
+    
+    @keyframes rotateleft {
+        from {
+            transform: rotate(0)
+        }
+        to {
+            transform: rotate(-360deg)
+        }
+    }
+    
+    @keyframes rotateright {
+        from {
+            transform: rotate(0)
+        }
+        to {
+            transform: rotate(360deg)
+        }
+    }
+</style>
+
+</html>
