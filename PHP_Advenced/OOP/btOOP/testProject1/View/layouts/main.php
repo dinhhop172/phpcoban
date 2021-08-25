@@ -68,7 +68,7 @@
     <div class="row">
         <div class="col-md-12">
             <h2 class="text-center bg-warning">This is footer</h2>
-        </div>
+        </div>  
     </div>
 </div>
 </body>

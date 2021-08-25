@@ -24,7 +24,7 @@
         $this->__password = md5($password.'ky_tu_muon_them');
     }
 }
-  
+
 // Sử dụng
 $a = new As();
   

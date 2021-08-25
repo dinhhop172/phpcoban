@@ -48,6 +48,7 @@
 foreach($input as $item){
     if(isset($arr[strtolower($item)])){
         $result .= $arr[strtolower($item)].' ';
+        $flag = true;
     }else{
         echo "Ban da nhap sai, ky tu {$item} khong dung.";
         $flag = false;

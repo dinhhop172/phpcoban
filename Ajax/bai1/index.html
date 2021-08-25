@@ -74,17 +74,17 @@
     }
 </style>
 <script type="text/javascript">
-    $(function() {
-        $('#get-data').on('click', function() {
+    $(function () {
+        $('#get-data').on('click', function () {
             $('#body_loading').addClass('loading_box');
             $this = $(this);
             $this.addClass('disabled');
             $.ajax({
                 url: 'http://localhost/phpcoban/Ajax/bai1/result.php',
                 method: 'GET',
-                success: function(result) {
+                success: function (result) {
                     $result = JSON.parse(result);
-
+                    console.log($result);
                     $txt = '';
                     for (var i = 0; i < $result.length; i++) {
 
@@ -95,20 +95,21 @@
 							        <td>
 							        		<a onclick="actionEdit(` + $result[i]['id'] + `)" class="edit" href="#">Edit</a> | 
 							        		<a onclick="actionDelete(` + $result[i]['id'] + `)" class="delete" href="#">Delete</a></td>
-							      </tr>`;
+                                  </tr>`;
+
                     }
                     $('tbody').html($txt);
 
                     $('#body_loading').removeClass('loading_box');
                     $this.remove();
                 },
-                error: function(e) {
+                error: function (e) {
                     console.log(e);
                 }
             });
         });
 
-        $('#update_value').on('click', function() {
+        $('#update_value').on('click', function () {
             $value = $('#value').val();
             $meaning = $('#meaning').val();
 
@@ -159,7 +160,7 @@
                 'id': id
             },
             // dataType: JSON,
-            success: function(result) {
+            success: function (result) {
                 $id = result;
                 $value = $('#content_' + $id).text();
 
@@ -171,12 +172,14 @@
                 });
 
                 $elements = $('tbody > tr');
-
-                $.each($elements, function($key, $value) {
-                    $(this).children().first().text($key += 1)
+                $.each($elements, function ($key, $value) {
+                    $(this).children().first().text($key += 1);
+                    // console.log($value);
+                    console.log(this);
                 });
+
             },
-            error: function(e) {
+            error: function (e) {
                 console.log(e);
             }
         });
@@ -210,14 +213,14 @@
         top: 0;
         width: 100%;
     }
-    
+
     .loading_box>p {
         font-weight: bold;
         font-size: 30px;
         color: #00ff00;
         display: inline
     }
-    
+
     .loading_box>div {
         display: flex;
         justify-content: center;
@@ -225,7 +228,7 @@
         width: 400px;
         height: 400px
     }
-    
+
     .loading_box>div>span {
         background-color: transparent;
         height: 190px;
@@ -240,7 +243,7 @@
         animation: rotateleft 1.25s infinite ease-in-out;
         position: absolute;
     }
-    
+
     .loading_box>div>span~span {
         background-color: transparent;
         width: 150px;
@@ -255,40 +258,43 @@
         animation: rotateright 1.25s infinite ease-in-out;
         position: absolute;
     }
-    
+
     .loading_box>section {
         position: absolute;
         overflow: hidden;
         animation: words 2.5s infinite ease-in-out;
     }
-    
+
     .loading_box>section>p {
         font-weight: bold;
         color: white;
     }
-    
+
     @keyframes words {
         from {
             width: 0
         }
+
         to {
             width: 130px
         }
     }
-    
+
     @keyframes rotateleft {
         from {
             transform: rotate(0)
         }
+
         to {
             transform: rotate(-360deg)
         }
     }
-    
+
     @keyframes rotateright {
         from {
             transform: rotate(0)
         }
+
         to {
             transform: rotate(360deg)
         }
