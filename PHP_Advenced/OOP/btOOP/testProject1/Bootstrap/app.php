@@ -4,7 +4,7 @@ $autoloadController = function ($className) {
     if (file_exists($path)) {
         include_once "$path";
     } else {
-        echo '404 NOT FOUND';
+        echo '404 NOT FOUND vc';
     }
 };
 
@@ -19,4 +19,3 @@ $autoloadModel = function ($className) {
 
 spl_autoload_register($autoloadController);
 spl_autoload_register($autoloadModel);
-

@@ -1,14 +1,14 @@
-<?php 
-    $a = $_GET['aa'];
-    $b = $_GET['bb'];
-    echo $a + $b;
+<?php
+$a = $_GET['aa'];
+$b = $_GET['bb'];
+echo $a + $b;
 
-    // $myObj->name = "John";
-    // $myObj->age = 30;
-    // $myObj->city = "New York";
-    $aa = ['asd', 'asd', 'asd', 'asd', 'asd'];
-    $arr = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
-    $aop = '[
+// $myObj->name = "John";
+// $myObj->age = 30;
+// $myObj->city = "New York";
+$aa = ['asd', 'asd', 'asd', 'asd', 'asd'];
+$arr = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
+$aop = '[
         {
           "userId": 1,
           "id": 1,
@@ -34,57 +34,60 @@
           "body": "ullam et saepe reiciendis voluptatem adipisci\nsit amet autem assumenda provident rerum culpa\nquis hic commodi nesciunt rem tenetur doloremque ipsam iure\nquis sunt voluptatem rerum illo velit"
         }
     ]';
-    $asd = json_encode($arr);
+$asd = json_encode($arr);
 
-    $myJSON = json_decode($asd, true);
+$myJSON = json_decode($asd, true);
 
-    echo '<pre>';
-    print_r($myJSON);
-    echo '</pre>';
-    foreach($myJSON as $user){
-        echo ($user);
-    }
-    echo '<pre>';
-    print_r($aop);
-    echo '</pre>';
-    $myJSON1 = json_decode($aop, true);
-    echo '<pre>';
-    print_r($myJSON1);
-    echo '</pre>';
-    // echo 'Day la ket qua: '.$myJSON1[0]->body;
-    foreach($myJSON1 as $key => $value){
-        print_r($value['userId']);
-    }
+echo '<pre>';
+print_r($myJSON);
+echo '</pre>';
+foreach ($myJSON as $user) {
+    echo ($user);
+}
+echo '<pre>';
+print_r($aop);
+echo '</pre>';
+$myJSON1 = json_decode($aop, true);
+echo '<pre>';
+print_r($myJSON1);
+echo '</pre>';
+// echo 'Day la ket qua: '.$myJSON1[0]->body;
+foreach ($myJSON1 as $key => $value) {
+    print_r($value['userId']);
+}
 ?>
 <html>
-    <style>
-        table, th, td{
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-    </style>
-    <table>
-        <thead>
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+</style>
+<table>
+    <thead>
+        <tr>
+            <th>userId</th>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Body</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+        foreach ($myJSON1 as $key => $value) {
+            // echo $value1.'<br>';
+
+        ?>
             <tr>
-                <th>userId</th>
-                <th>Id</th>
-                <th>Title</th>
-                <th>Body</th>
+                <td><?php echo $value['userId'] ?></td>
+                <td><?php echo $value['id'] ?></td>
+                <td><?php echo $value['title'] ?></td>
+                <td><?php echo $value['body'] ?></td>
             </tr>
-        </thead>
-        <tbody>
-            <?php 
-            foreach($myJSON1 as $key => $value){
-                    // echo $value1.'<br>';
-                
-            ?>
-                <tr>
-                    <td><?php echo $value['userId'] ?></td>
-                    <td><?php echo $value['id'] ?></td>
-                    <td><?php echo $value['title'] ?></td>
-                    <td><?php echo $value['body'] ?></td>
-                </tr>
-            <?php } ?>
-        </tbody>
-    </table>
+        <?php } ?>
+    </tbody>
+</table>
+
 </html>

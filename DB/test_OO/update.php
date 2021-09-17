@@ -3,7 +3,7 @@
     $id = $_GET['id_product'];
     $sql = "SELECT * FROM product WHERE id='$id'";
     // $sql = "UPDATE product SET price='43.122' where id='$id'";
-    $result = $conn->query($sql);
+    $result = $conn->query($sql);   
     while($row = $result->fetch_assoc()){
         $name = $row['product_name'];
         $price = $row['price'];
